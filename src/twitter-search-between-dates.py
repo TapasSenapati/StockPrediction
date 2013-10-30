@@ -11,7 +11,7 @@ api = tweepy.API(auth)
 store = []
 searchLanguage = 'en'
 count = 0
-f = open('dump_microsoft', 'w')
+f = open('dump_microsoft', 'w')             #file to write to
 
 for tweet in tweepy.Cursor(api.search, q="Microsoft", rpp=10000, 
                            result_type="recent",
@@ -30,7 +30,7 @@ for tweet in tweepy.Cursor(api.search, q="Microsoft", rpp=10000,
     count =  count+1
     #print "count : "
     #print count
-    if count == 10000:
+    if count == 10000:                                #stop at 10k records.
         f.close()
         break
      
