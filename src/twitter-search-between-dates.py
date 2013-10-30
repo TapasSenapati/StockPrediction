@@ -10,6 +10,9 @@ api = tweepy.API(auth)
 #     print status.text+'\n'
 store = []
 searchLanguage = 'en'
+count = 0
+f = open('dump_microsoft', 'w')
+
 for tweet in tweepy.Cursor(api.search, q="Microsoft", rpp=10000, 
                            result_type="recent",
                            #include_entities=True,
@@ -17,9 +20,19 @@ for tweet in tweepy.Cursor(api.search, q="Microsoft", rpp=10000,
                            until= '2013-10-27',
                            lang=searchLanguage.encode("utf_8", "replace"),#"en",
                            with_twitter_user_id=True).items():
-    print tweet.id, tweet.created_at#, tweet.text #tweet.user.name
     time.sleep(0.5)
+    #print tweet.id, tweet.created_at
+    #print tweet.text.encode("ascii" , "ignore") 
+    f.write(tweet.text.encode("ascii" , "ignore"))
+    f.write("\n")
+    #print tweet.user.name.encode("ascii" , "ignore")
     store.append(tweet.user.name)
-    print "\n"
+    count =  count+1
+    #print "count : "
+    #print count
+    if count == 10000:
+        f.close()
+        break
      
 print store
+print count
