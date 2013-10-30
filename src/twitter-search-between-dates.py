@@ -1,7 +1,7 @@
 import tweepy
 import oauth2 as oauth
 
-auth = tweepy.auth.OAuthHandler('ihCnDKwZWZoXpeb7z3rQQ', 'TGcMdTGcxIQVC8dWeVrTNjjJhaU3GrsREE3U6jCqWc')
+auth = tweepy.auth.OAuthHandler('ihCnDKwZWZoXpeb7z3rQQ', 'TGcMdTGcxIQVC8dWeVrTNjjJhaU3GrsREE3U6jCqWc') #shayan's
 auth.set_access_token('1320599683-uTYgL1xAIWMUnIJlK9rKMFigukmoc6z5eGdnrDI', 'LW3oTRP69Qof08Act9iH13HzfN4ZOAzihxvvrUMWqI')
 api = tweepy.API(auth)
 # print api.me().name
