@@ -103,6 +103,15 @@ for row in inpTweets:
     processedTweet = processTweet(tweet)
     featureVector = getFeatureVector(processedTweet, stopWords)
     tweets.append((featureVector, sentiment));
+with open("AFINN-111.txt") as f:
+        for line in f.readlines():
+        #line = f.readline()
+                word,val = line.strip().split("\t")
+                if int(val) > 0:
+                        sentiment = "positive"
+                else:
+                        sentiment = "negative"
+                tweets.append((word,sentiment))
 #end loop
 #print tweets
 
