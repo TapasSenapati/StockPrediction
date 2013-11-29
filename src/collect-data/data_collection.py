@@ -23,7 +23,7 @@ def getCompanyTweets(company_name, fetch_date, priority_handles, official_handle
     
     output_file = company_name + '_' + fetch_date + '.json'
     for tweet in tweepy.Cursor(api.search, q=company_name, rpp=10000, 
-                               result_type="recent",
+                               result_type="mixed",
                                include_entities=True,
                                since = fetch_date,
                                until= next_date,
