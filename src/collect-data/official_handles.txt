@@ -1,2 +1,1 @@
-Microsoft:Microsoft
-Google:google
+Apple:AAPL
