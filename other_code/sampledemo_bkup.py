@@ -97,9 +97,9 @@ def extract_features(tweet):
 	
 
 #Read the tweets one by one and process it
-inpTweets = csv.reader(open('training2.csv', 'rb'), delimiter=',')
+inpTweets = csv.reader(open('training.1600000.processed.noemoticon.csv', 'rb'), delimiter=',')
 stopWords = getStopWordList('stopWordsList.txt')
-featureList = getFeatureList('myfeaturelist3.txt')
+featureList = getFeatureList('myfeaturelist2.txt')
 count = 0;
 tweets = []
 for row in inpTweets:
@@ -141,13 +141,13 @@ else:
 #print "\n\n"
 #print extract_features(processedTestTweet)
 ########################################
-test_tweets = csv.reader(open("Microsoft21.csv","rb"),delimiter=",")
+test_tweets = json.load(open("../data_files/MSFT_2013-11-28.json"))
 f=open("output.csv","wb")
 positive_sentiment = 0
 negative_sentiment = 0
-for row in test_tweets:
+for key in test_tweets.keys():
 	#print key+"\n"
-	key_clean1 = row[5].replace("\n"," ")
+	key_clean1 = key.replace("\n"," ")
 	key_clean = key_clean1.replace(","," ")
 	key_clean = key_clean.replace("microsoft","")
 	processedTestTweet = processTweet(key_clean)

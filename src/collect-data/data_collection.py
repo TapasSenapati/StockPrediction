@@ -5,6 +5,7 @@ import json
 import time
 import tweepy
 import oauth2 as oauth
+import csv
 from datetime import date, timedelta
 
 def getCompanyTweets(company_name, fetch_date, priority_handles, official_handles_content):
@@ -18,21 +19,31 @@ def getCompanyTweets(company_name, fetch_date, priority_handles, official_handle
     t=time.strptime(fetch_date,'%Y-%m-%d')
     newdate=date(t.tm_year,t.tm_mon,t.tm_mday)+timedelta(1)
     next_date = newdate.strftime('%Y-%m-%d')
+    newdate =date(t.tm_year,t.tm_mon,t.tm_mday)-timedelta(1) 
+    prev_date = newdate.strftime('%Y-%m-%d')
     
     twit_dict = {}
     
-    output_file = company_name + '_' + fetch_date + '.json'
+    output_file = company_name + '_' + fetch_date + '.csv'
+    opening_time = time.strptime(prev_date+" 17:00:00",'%Y-%m-%d %H:%M:%S')
+    closing_time = time.strptime(fetch_date+" 17:00:00",'%Y-%m-%d %H:%M:%S')
     for tweet in tweepy.Cursor(api.search, q=company_name, rpp=10000, 
                                result_type="mixed",
                                include_entities=True,
-                               since = fetch_date,
+                               since = prev_date,
                                until= next_date,
                                lang="en",
                                with_twitter_user_id=True).items():
-        print "Created at - " + str(tweet.created_at) + " Tweeted by - " + tweet.user.screen_name + " Text - " + tweet.text.encode('ascii', 'ignore')
-        text = tweet.text.encode('ascii', 'ignore')
-        if text:
-            twit_dict[text] = [tweet.user.screen_name]
+	if closing_time > time.strptime(str(tweet.created_at),'%Y-%m-%d %H:%M:%S') and opening_time <= time.strptime(str(tweet.created_at),'%Y-%m-%d %H:%M:%S'):
+		#time.sleep(0.5#)
+		#continue
+        	print "Created at - " + str(tweet.created_at) + " Tweeted by - " + tweet.user.screen_name + " Text - " + tweet.text.encode('ascii', 'ignore')
+		text = tweet.text.encode('ascii', 'ignore')
+	
+        	if text:
+            		twit_dict[text] = [tweet.user.screen_name]
+	else:
+		print "Created at(ignored) - " + str(tweet.created_at) + " Tweeted by - " + tweet.user.screen_name + " Text - " + tweet.text.encode('ascii', 'ignore')
         time.sleep(0.5)
     
     for line in official_handles_content:
@@ -46,10 +57,14 @@ def getCompanyTweets(company_name, fetch_date, priority_handles, official_handle
     
     twit_priority_dict = assign_priorities(twit_dict, priority_handles)
     if twit_priority_dict:
-        with open(output_file, 'w') as outfile:
-            json.dump(twit_dict, outfile)
-            outfile.close()
-            print "\n****** Tweets for company - " + company_name + " successfully written into file - " + output_file + "******\n"
+	writer=csv.writer(open(output_file,"w"),delimiter=',')
+
+        for key in twit_dict.keys():
+		row = []
+		row=[key,"neutral"]
+		writer.writerow(row)
+            #outfile.close()
+      	print "\n****** Tweets for company - " + company_name + " successfully written into file - " + output_file + "******\n"
     else:
         print "****** NO TWEETS FOUND ******"
         
