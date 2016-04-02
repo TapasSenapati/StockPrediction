@@ -1,6 +1,6 @@
 StockPrediction
 ===============
-
+Stock Prediction
 Data mining project to predict stock prices on basis of sentiments.
 
 
